@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AstralList | Your Dashboard</title>
+    <style>
+        :root {
+            --bg-space: #0b0813;
+            --purple-core: #6d28d9;
+            --purple-glow: #a855f7;
+            --purple-dark: #1e1b4b;
+            --glass-bg: rgba(25, 18, 46, 0.45);
+            --glass-border: rgba(168, 85, 247, 0.2);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 0%, #2e1065 0%, var(--bg-space) 70%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Top Navigation Bar */
+        nav {
+            width: 100%;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ffffff, var(--purple-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sign-out {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .sign-out:hover {
+            color: white;
+        }
+
+        /* Main Header */
+        header {
+            width: 100%;
+            max-width: 1000px;
+            padding: 3rem 1.5rem 2rem 1.5rem;
+        }
+
+        .welcome-text {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Main Container */
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            padding: 0 1.5rem 4rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        /* Glassmorphic Cards */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Popular Grid */
+        .popular-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .task-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 150px;
+        }
+
+        .task-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--purple-glow);
+            background: rgba(109, 40, 217, 0.15);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+        }
+
+        .task-card .icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .task-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Dropdown Styling */
+        .dropdown-container {
+            position: relative;
+            width: 100%;
+        }
+
+        select {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: var(--purple-dark);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 1rem;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            transition: all 0.2s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--purple-glow);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+        }
+
+        .dropdown-container::after {
+            content: '▼';
+            font-size: 0.8rem;
+            color: var(--purple-glow);
+            position: absolute;
+            right: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        /* Recent Activity / Feature Add-on */
+        .recent-list {
+            list-style: none;
+        }
+
+        .recent-list li {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .recent-list li:last-child {
+            border-bottom: none;
+        }
+
+        .recent-list a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .recent-list a:hover {
+            color: var(--purple-glow);
+        }
+
+        .time-tag {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation (For logged-in users) -->
+    <nav>
+        <div class="nav-logo">AstralList</div>
+        <!-- This acts as your "go to login page" link for testing -->
+        <a href="/login.html" class="sign-out">Sign Out / Login Page</a>
+    </nav>
+
+    <header>
+        <h1 class="welcome-text">What are we organizing today?</h1>
+        <p class="subtitle">Choose a template to get started, or pick up where you left off.</p>
+    </header>
+
+    <div class="container">
+
+        <!-- Core Popular Options (For the average person) -->
+        <section class="glass-card">
+            <h2 class="section-title">Popular Templates</h2>
+            <div class="popular-grid">
+                
+                <!-- Grocery -->
+                <a href="/list" class="task-card">
+                    <div class="icon">🛒</div>
+                    <div>
+                        <h3>Grocery Trip</h3>
+                        <p>Auto-sorts your list by store aisles so you can shop faster.</p>
+                    </div>
+                </a>
+
+                <!-- Daily To-Do -->
+                <a href="/todo" class="task-card">
+                    <div class="icon">✅</div>
+                    <div>
+                        <h3>Daily Tasks</h3>
+                        <p>Organize your day by priority, errands, and quick wins.</p>
+                    </div>
+                </a>
+
+                <!-- Trip Planner -->
+                <a href="/travel" class="task-card">
+                    <div class="icon">✈️</div>
+                    <div>
+                        <h3>Trip Planner</h3>
+                        <p>Keep track of packing, itineraries, and booking info in one place.</p>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- The 30+ Dropdown Menu -->
+        <section class="glass-card">
+            <h2 class="section-title">More Templates</h2>
+            <div class="dropdown-container">
+                <select id="taskDropdown" onchange="navigateToTask()">
+                    <option value="" disabled selected>Browse all templates...</option>
+                    <option value="/modes/meal-prep">Weekly Meal Prep</option>
+                    <option value="/modes/budget">Monthly Budget & Bills</option>
+                    <option value="/modes/fitness">Workout Routine</option>
+                    <option value="/modes/cleaning">House Cleaning Schedule</option>
+                    <option value="/modes/moving">Moving & Packing List</option>
+                    <option value="/modes/party">Event & Party Planning</option>
+                    <option value="/modes/habits">Daily Habit Tracker</option>
+                    <option value="/modes/reading">Reading List</option>
+                    <option value="/modes/watchlist">Movie & TV Watchlist</option>
+                    <option value="/modes/gifts">Gift Shopping List</option>
+                    <option value="/modes/projects">Basic Project Tracker</option>
+                    <option value="/modes/study">Study & Exam Notes</option>
+                    <option value="/modes/job-hunt">Job Hunt Tracker</option>
+                    <option value="/modes/pets">Pet Care Schedule</option>
+                    <option value="/modes/car">Car Maintenance Log</option>
+                    <option value="/modes/garden">Plant & Garden Care</option>
+                    <option value="/modes/renovation">Home Renovation Ideas</option>
+                    <option value="/modes/wedding">Wedding Planning</option>
+                    <option value="/modes/baby">Baby Prep Checklist</option>
+                    <option value="/modes/medication">Medication Tracker</option>
+                    <option value="/modes/recipes">Recipe Organizer</option>
+                    <option value="/modes/bucket-list">Bucket List</option>
+                    <option value="/modes/morning">Morning Routine Planner</option>
+                    <option value="/modes/evening">Evening Wind-Down</option>
+                    <option value="/modes/meetings">Meeting Notes & Action Items</option>
+                    <option value="/modes/brainstorm">Brainstorming Board</option>
+                    <option value="/modes/packing">Vacation Packing List</option>
+                    <option value="/modes/school">School Assignments</option>
+                    <option value="/modes/inventory">Home Inventory</option>
+                    <option value="/modes/freelance">Freelance Client Work</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Feature Add: Recent Activity -->
+        <section class="glass-card">
+            <h2 class="section-title">Recent Lists</h2>
+            <ul class="recent-list">
+                <li>
+                    <a href="#">Weekend Costco Run</a>
+                    <span class="time-tag">Updated 2 hrs ago</span>
+                </li>
+                <li>
+                    <a href="#">Deep Clean Apartment</a>
+                    <span class="time-tag">Updated yesterday</span>
+                </li>
+                <li>
+                    <a href="#">Summer Camping Trip</a>
+                    <span class="time-tag">Updated 3 days ago</span>
+                </li>
+            </ul>
+        </section>
+
+    </div>
+
+    <script>
+        function navigateToTask() {
+            const dropdown = document.getElementById('taskDropdown');
+            const targetUrl = dropdown.value;
+            if (targetUrl) {
+                // In your GitHub pages test, this might 404 until you build the pages,
+                // but it proves the routing logic works.
+                window.location.href = targetUrl;
+            }
+        }
+    </script>
+</body>
+</html>
